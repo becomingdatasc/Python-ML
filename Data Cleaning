@@ -1,0 +1,97 @@
+
+
+##Data Cleaning - Agregación de datos por categoría
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+Vehicle = ["Rent_a_car", "Buy_a_Vehicle"]
+Price = ["A_class", "B_class", "C_class","D_class"]
+
+
+n = 3000
+Vehicle_data = []
+Price_data = []
+
+for i in range(0,3000):
+    Vehicle_data.append(np.random.choice(Vehicle))
+    Price_data.append(np.random.choice(Price))
+
+
+Vehicle_data[1:25]
+
+
+Price_data[1:25]
+
+
+Weight = 1300 + 1.9 * np.random.randn(n)
+Old = 2 +1 *np.random.randint(2, size=3000)
+Price = 18000 + 7500 * np.random.randint(2, size=3000)
+
+
+data = pd.DataFrame(
+    {
+        "Vehicle" : Vehicle_data,
+        "Class" : Price_data,
+        "Weight" : Weight,
+        "Old" : Old,
+        "Price" : Price
+    }
+)
+
+
+data.head()
+
+data.tail()
+
+
+##Agrupación de datos
+grouped_Vehicle = data.groupby("Vehicle")
+
+
+
+grouped_Vehicle.groups
+
+
+
+for names, groups in grouped_Vehicle:
+    print(names)
+    print(groups)
+
+
+
+grouped_Vehicle.get_group("Buy_a_Vehicle")
+
+
+double_group = data.groupby(["Vehicle", "Class"])
+
+
+for names, groups in double_group:
+    print(names)
+    print(groups)
+
+
+##Operaciones sobre datos agrupados
+double_group.sum()
+
+
+double_group.size()
+
+
+double_group.describe()
+
+
+grouped_Price = double_group["Price"]
+
+
+grouped_Price.describe()
+
+
+double_group.aggregate(
+    {
+        "Price": np.sum,
+        "Old" : np.mean
+    }
+)
